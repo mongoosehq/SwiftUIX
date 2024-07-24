@@ -22,7 +22,7 @@ extension ActionLabelView {
 
 // MARK: - Extensions
 
-extension ActionLabelView {
+extension Button {
     public init(action: Action, label: Label) {
         self.init(action: action, label: { label })
     }
@@ -120,7 +120,7 @@ extension Button {
 
 // MARK: - Conformances
 
-extension Button: ActionLabelView {
+extension Button/*: ActionLabelView*/ {
     public init(action: Action, @ViewBuilder label: () -> Label) {
         self.init(action: action.perform, label: label)
     }
