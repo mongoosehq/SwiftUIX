@@ -81,9 +81,8 @@
 // - The compatibility declaration is always defined in terms of the declaration
 //   imported by the active SDK/importer configuration; this file does not
 //   synthesize the raw attachment Unicode scalar directly.
-// - In the toolchains covered above, Xcode 26.4.1 (Swift 6.3.1) on native macOS
-//   is the only configuration where the SDK imports `NSAttachmentCharacter`
-//   without `NSTextAttachment.character`.
+// - In the toolchains covered above, Xcode 26.4.x (Swift 6.3.0/6.3.1) on native
+//   macOS imports `NSAttachmentCharacter` without `NSTextAttachment.character`.
 // - Xcode 26.4.1 Mac Catalyst and UIKit-family platforms import
 //   `NSTextAttachment.character`; this file supplies `NSAttachmentCharacter`
 //   there to keep both public spellings available.
@@ -113,11 +112,11 @@ import UIKit
 #endif
 
 #if os(macOS) || canImport(UIKit)
-#if compiler(>=6.3.1) && !compiler(>=6.3.2)
+#if compiler(>=6.3) && !compiler(>=6.3.2)
 #if os(macOS) && !targetEnvironment(macCatalyst)
 import AppKit
 
-/// Fix for Xcode 26.4.1 where the Swift importer exposes
+/// Fix for Xcode 26.4.x where the Swift importer exposes
 /// `NSAttachmentCharacter` but not `NSTextAttachment.character`.
 extension NSTextAttachment {
     static var character: Int {

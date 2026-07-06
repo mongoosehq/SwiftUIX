@@ -217,23 +217,26 @@ extension _TargetPlatformConditionalModifiable where Root: Scene, Platform == _S
 }
 
 @available(macOS 11.0, iOS 14.0, watchOS 8.0, tvOS 14.0, *)extension _TargetPlatformConditionalModifiable where Root: View, Platform == _SwiftUI_TargetPlatform.iOS {
-    @ViewBuilder
     public func navigationBarTitleDisplayMode(
         _ mode: SpecificTypes.NavigationBarItemTitleDisplayMode
     ) -> _TargetPlatformConditionalModifiable<some View, Platform> {
 #if os(iOS)
-        _TargetPlatformConditionalModifiable<_, Platform> {
-            switch mode {
-                case .automatic:
-                    root.navigationBarTitleDisplayMode(.automatic)
-                case .inline:
-                    root.navigationBarTitleDisplayMode(.inline)
-                case .large:
-                    root.navigationBarTitleDisplayMode(.inline)
-            }
+        let titleDisplayMode: NavigationBarItem.TitleDisplayMode
+
+        switch mode {
+            case .automatic:
+                titleDisplayMode = .automatic
+            case .inline:
+                titleDisplayMode = .inline
+            case .large:
+                titleDisplayMode = .large
         }
+
+        return _TargetPlatformConditionalModifiable<_, Platform>(
+            root: root.navigationBarTitleDisplayMode(titleDisplayMode)
+        )
 #else
-        self
+        return self
 #endif
     }
 }
@@ -254,18 +257,15 @@ extension _TargetPlatformConditionalModifiable where Root: View, Platform == _Sw
 
 @available(macOS 13.0, iOS 15.0, watchOS 8.0, tvOS 15.0, *)
 extension _TargetPlatformConditionalModifiable where Root: View, Platform == _SwiftUI_TargetPlatform.macOS {
-    @ViewBuilder
     public func controlActiveState(
         _ state: _SwiftUI_TargetPlatform.macOS._ControlActiveState
     ) -> _TargetPlatformConditionalModifiable<some View, Platform> {
         #if os(macOS)
-        _TargetPlatformConditionalModifiable<_, Platform> {
-            self.environment(\.controlActiveState, .init(state))
-        }
+        return _TargetPlatformConditionalModifiable<_, Platform>(
+            root: root.environment(\.controlActiveState, .init(state))
+        )
         #else
-        _TargetPlatformConditionalModifiable<_, Platform> {
-            self
-        }
+        return self
         #endif
     }
 }
